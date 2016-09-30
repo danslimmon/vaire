@@ -75,13 +75,11 @@ func main() {
 	r.Use(middlewareReqId)
 	r.Use(middlewareCheckAuth)
 	r.Use(ginrus.Ginrus(log.StandardLogger(), time.RFC3339, true))
-	r.POST("/api/v1/queues/:queueName", func(c *gin.Context) {
-		handle_Post_Queues_QueueName
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	r.POST("/api/v1/queues/:queueName", handle_POST_Queues_QueueName)
 
 	// Start listening
+	log.WithFields(log.Fields{
+		"listen_addr": Config.Listen,
+	}).Info("Listening for connections")
 	r.Run(Config.Listen)
 }
