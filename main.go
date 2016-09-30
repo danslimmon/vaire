@@ -5,6 +5,7 @@ import (
 	"time"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/gin-gonic/contrib/ginrus"
 	"github.com/gin-gonic/gin"
 )
 
@@ -70,10 +71,12 @@ func main() {
 	}
 
 	// Set up router
-	r := gin.Default()
+	r := gin.New()
 	r.Use(middlewareReqId)
 	r.Use(middlewareCheckAuth)
+	r.Use(ginrus.Ginrus(log.StandardLogger(), time.RFC3339, true))
 	r.POST("/api/v1/queues/:queueName", func(c *gin.Context) {
+		handle_Post_Queues_QueueName
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
